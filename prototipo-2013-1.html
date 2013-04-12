@@ -9,19 +9,51 @@
    <canvas id ="tela" width="800" height="600">Seu navegador não suporta canvas</canvas>
    <script>
    var tela = document.getElementById ("tela");
-   console.log("Ola mundo");
-   console.log(tela);
+   //console.log("Ola mundo");
+   //console.log(tela);
    var ctx = tela.getContext("2d");
    //ctx.fillRect(10, 10, 50, 50);
+   /*
    ctx.moveTo(10,10);
    ctx.lineTo(20,20);
    for(var i = 0; i<200; i=i+10){
-   ctx.moveTo(20,20);
-   ctx.lineTo(100,i);
-}
+      ctx.moveTo(20,20);
+      ctx.lineTo(100,i);
+   }
+   ctx.stroke();
+   */
+
+   ctx.beginPath();
+   ctx.moveTo(50, 50);
+   ctx.lineTo(50, 100);   
+   ctx.lineTo(75, 125);
+   ctx.moveTo(50, 100);
+   ctx.lineTo(25, 125);
+   ctx.moveTo(50,70);      
+   ctx.lineTo(75,80);
+   ctx.moveTo(50,70);
+   ctx.lineTo(25,80);
+   ctx.moveTo(50,50);
+   ctx.closePath();
    ctx.stroke();
 
+   ctx.beginPath();
+   ctx.arc(50,50,15,0,2*Math.PI);
+   ctx.closePath();
+   ctx.fillStyle="yellow";
+   ctx.fill();
+   ctx.stroke();
 
+   ctx.fillStyle="brown";
+   ctx.beginPath();
+   ctx.fillRect(300,200,100,100);
+   ctx.strokeRect(300,200,100,100);
+   ctx.closePath();
+
+   ctx.beginPath();
+   ctx.fillRect(20,250,150,50);
+   ctx.strokeRect(20,250,150,50);
+   ctx.closePath();
 
 
 
