@@ -22,41 +22,78 @@
    }
    ctx.stroke();
    */
+   var x = 70;
+   var y = 80;
+   var p1x = 300;
+   var p1y = 200;
+   function desenhaPersonagem() {
+	   
+	   ctx.beginPath();
+	   ctx.arc(x,y,5,0,2*Math.PI);
+	   ctx.closePath();
+	   ctx.fillStyle="blue";
+	   ctx.fill();
+	   ctx.stroke();
 
-   ctx.beginPath();
-   ctx.moveTo(50, 50);
-   ctx.lineTo(50, 100);   
-   ctx.lineTo(75, 125);
-   ctx.moveTo(50, 100);
-   ctx.lineTo(25, 125);
-   ctx.moveTo(50,70);      
-   ctx.lineTo(75,80);
-   ctx.moveTo(50,70);
-   ctx.lineTo(25,80);
-   ctx.moveTo(50,50);
-   ctx.closePath();
-   ctx.stroke();
+	   ctx.save();
+	   ctx.translate(x, y);
+	   ctx.beginPath();
+	   ctx.moveTo(0, -25);
+	   ctx.lineTo(0, 25);   
+	   ctx.lineTo(25, 50);
+	   ctx.moveTo(0, 25);
+	   ctx.lineTo(-25, 50);
+	   ctx.moveTo(0,-5);      
+	   ctx.lineTo(25,5);
+	   ctx.moveTo(0,-5);
+	   ctx.lineTo(-25,5);
+	   ctx.moveTo(0,-25);
+	   ctx.closePath();
+	   ctx.stroke();
 
-   ctx.beginPath();
-   ctx.arc(50,50,15,0,2*Math.PI);
-   ctx.closePath();
-   ctx.fillStyle="yellow";
-   ctx.fill();
-   ctx.stroke();
+	   ctx.beginPath();
+	   ctx.arc(0,-25,15,0,2*Math.PI);
+	   ctx.closePath();
+	   ctx.fillStyle="yellow";
+	   ctx.fill();
+	   ctx.stroke();
+	   ctx.restore();
+	}
+   
+   function desenhaParede2(){
+	   ctx.beginPath();
+	   ctx.fillStyle="brown";	
+	   ctx.fillRect(20,250,150,50);
+	   ctx.strokeRect(20,250,150,50);
+	   ctx.closePath();
+	}
+	
+	function desenhaParede1() {
+	
+	    
+		
+	    ctx.save();
+		ctx.translate(p1x , p1y);
+		ctx.fillStyle="brown";
+		ctx.beginPath();
+	    ctx.fillRect(-50,-50,100,100);
+	    ctx.strokeRect(-50,-50,100,100);
+  	    ctx.closePath();
+		ctx.restore();
+		
+		ctx.beginPath();
+	    ctx.arc(p1x,p1y,5,0,2*Math.PI);
+	    ctx.closePath();
+	    ctx.fillStyle="blue";
+	    ctx.fill();
+	    ctx.stroke();
+	}
+	
+	desenhaPersonagem();	
+	desenhaParede1();	
+	desenhaParede2();
 
-   ctx.fillStyle="brown";
-   ctx.beginPath();
-   ctx.fillRect(300,200,100,100);
-   ctx.strokeRect(300,200,100,100);
-   ctx.closePath();
-
-   ctx.beginPath();
-   ctx.fillRect(20,250,150,50);
-   ctx.strokeRect(20,250,150,50);
-   ctx.closePath();
-
-
-
+	
 
 
 
