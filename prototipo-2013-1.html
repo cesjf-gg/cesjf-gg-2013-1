@@ -24,7 +24,9 @@
    */
    var x = 70;
    var y = 80;
-   var p1x = 300;
+   var vy = 0;
+   var ay = 30;
+   var p1x = 700;
    var p1y = 200;
    function desenhaPersonagem() {
 	   
@@ -67,11 +69,15 @@
 	   ctx.strokeRect(20,250,150,50);
 	   ctx.closePath();
 	}
+	function limpaTela(){
+	   ctx.beginPath();
+	   ctx.fillStyle="white";	
+	   ctx.fillRect(0,0,800,600);
+	   ctx.strokeRect(0,0,800,600);
+	   ctx.closePath();
+	}
 	
 	function desenhaParede1() {
-	
-	    
-		
 	    ctx.save();
 		ctx.translate(p1x , p1y);
 		ctx.fillStyle="brown";
@@ -88,16 +94,26 @@
 	    ctx.fill();
 	    ctx.stroke();
 	}
+	var anterior = new Date();
+	var agora = new Date();
+	var dt = agora - anterior;
+	console.log (dt);
+	function passo(){
+		agora = new Date();
+		dt = (agora - anterior) / 1000;
+		p1x-=120*dt;
+		vy+=ay*dt;
+		y+=vy*dt;
+		limpaTela();
+		desenhaPersonagem();
+		desenhaParede1();
+		desenhaParede2();
+		console.log (dt);
+		anterior = agora;
+	}
+	passo();
+	window.setInterval(passo,5);
 	
-	desenhaPersonagem();	
-	desenhaParede1();	
-	desenhaParede2();
-
-	
-
-
-
-
 </script>
    </body>
 </html>
