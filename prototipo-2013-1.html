@@ -35,68 +35,76 @@
 	   h:50,
 	   l:40,
 	   vy:0,
-	   ay:30,
+	   ay:250,
 	   mover:function(dt){
 		this.vy+=this.ay*dt;
 		this.y+=this.vy*dt;
 	   }
 	};
    var par1 = {
-	   x:500, 
-	   y:80,
+	   x:700, 
+	   y:225,
 	   h:50,
-	   l:40,
+	   l:100,
+	   vx:-120,
 	   vy:0,
-	   ay:30,
+	   ax:0,
+	   ay:0,
 	   mover:function(dt){
+		this.vx+=this.ax*dt;
 		this.vy+=this.ay*dt;
+		this.x+=this.vx*dt;
 		this.y+=this.vy*dt;
 	   }
 	};
-   var p1x = 700;
-   var p1y = 200;
    function desenhaPersonagem() {
 	   
-	   ctx.beginPath();
-	   ctx.arc(pc.x,pc.y,5,0,2*Math.PI);
-	   ctx.closePath();
-	   ctx.fillStyle="blue";
-	   ctx.fill();
-	   ctx.stroke();
 
 	   ctx.save();
+	   ctx.lineWidth="3";
 	   ctx.translate(pc.x, pc.y);
 	   ctx.beginPath();
 	   ctx.moveTo(0, -pc.h/3);
-	   ctx.lineTo(0, pc.h/3);   
-	   ctx.lineTo(pc.l/2, 2*pc.h/3);
-	   ctx.moveTo(0, pc.h/3);
-	   ctx.lineTo(-pc.l/2, 2*pc.h/3);
-	   ctx.moveTo(0,-pc.h/15);      
+	   ctx.lineTo(0, pc.h/6);   
+	   ctx.lineTo(pc.l/2, pc.h/2);
+	   ctx.moveTo(0, pc.h/6);
+	   ctx.lineTo(-pc.l/2, pc.h/2);
+	   ctx.moveTo(0,-pc.h/8);      
 	   ctx.lineTo(pc.l/2,pc.h/15);
-	   ctx.moveTo(0,-pc.h/15);
+	   ctx.moveTo(0,-pc.h/8);
 	   ctx.lineTo(-pc.l/2,pc.h/15);
 	   ctx.moveTo(0,-pc.h/3);
 	   ctx.closePath();
 	   ctx.stroke();
 
 	   ctx.beginPath();
-	   ctx.arc(0,-pc.h/3,pc.l/4,0,2*Math.PI);
+	   ctx.arc(0,-2*pc.h/6,pc.h/6,0,2*Math.PI);
 	   ctx.closePath();
 	   ctx.fillStyle="yellow";
 	   ctx.fill();
 	   ctx.stroke();
       
 
-      ctx.beginPath();
+      	   ctx.beginPath();
+	   ctx.lineWidth="1";
+	   ctx.strokeStyle="red";
 	   ctx.strokeRect(-pc.l/2,-pc.h/2,pc.l,pc.h);
 	   ctx.closePath();
-	   ctx.restore();
       
+	   ctx.restore();
+
+	   ctx.lineWidth="1";
+	   ctx.beginPath();
+	   ctx.arc(pc.x,pc.y,3,0,2*Math.PI);
+	   ctx.closePath();
+	   ctx.fillStyle="blue";
+	   ctx.fill();
+	   ctx.stroke();
 
 	}
    
    function desenhaParede2(){
+	   ctx.lineWidth="3";
 	   ctx.beginPath();
 	   ctx.fillStyle="brown";	
 	   ctx.fillRect(20,250,150,50);
@@ -113,31 +121,32 @@
 	
 	function desenhaParede1() {
 	    ctx.save();
-		ctx.translate(p1x , p1y);
-		ctx.fillStyle="brown";
-		ctx.beginPath();
-	    ctx.fillRect(-50,-50,100,100);
-	    ctx.strokeRect(-50,-50,100,100);
+	    ctx.translate(par1.x , par1.y);
+	    ctx.lineWidth="3";
+	    ctx.fillStyle="brown";
+	    ctx.beginPath();
+	    ctx.fillRect(-par1.l/2,-par1.h/2,par1.l,par1.h);
+	    ctx.strokeRect(-par1.l/2,-par1.h/2,par1.l,par1.h);
   	    ctx.closePath();
-		ctx.restore();
+	    ctx.restore();
 		
-		ctx.beginPath();
-	    ctx.arc(p1x,p1y,5,0,2*Math.PI);
+	    ctx.beginPath();
+	    ctx.arc(par1.x,par1.y,3,0,2*Math.PI);
 	    ctx.closePath();
 	    ctx.fillStyle="blue";
+	    ctx.lineWidth="1";
 	    ctx.fill();
 	    ctx.stroke();
 	}
 	var anterior = new Date();
 	var agora = new Date();
 	var dt = agora - anterior;
-	console.log (dt);
 	function passo(){
 		agora = new Date();
 		dt = (agora - anterior) / 1000;
 		// Movimentação
-		p1x-=120*dt;
 		pc.mover(dt);
+		par1.mover(dt);
 		if (pc.y>250-pc.h/2){
 			pc.y=250-pc.h/2;
 		}
