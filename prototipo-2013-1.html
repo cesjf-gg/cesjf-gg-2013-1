@@ -34,6 +34,20 @@
 	}
 	return true;
    }
+   
+   
+    function pisou(A, B){
+	if(A.x+A.l/2 < B.x-B.l/2){
+		return false;
+	} else if (A.x-A.l/2 > B.x+B.l/2){
+		return false;
+	} else if(Math.round(A.y+A.h/2) == Math.round(B.y-B.h/2)){
+		return true;
+	}else if(A.y+A.h/2 > B.y-B.h/2){
+		return false; 
+	}
+	return false;
+   }
 /*
    Ax+Aw/2 < Bx-Bw/2
    Ax-Aw/2 > Bx+Bw/2
@@ -42,6 +56,7 @@
 
 */
    var pc = {
+	   pulou:false, 
 	   x:70, 
 	   y:80,
 	   h:50,
@@ -58,11 +73,11 @@
 	   }
 	};
    var par1 = {
-	   x:400, 
+	   x:600, 
 	   y:225,
-	   h:50,
-	   l:100,
-	   vx:-100,
+	   h:10,
+	   l:1200,
+	   vx:-200,
 	   vy:0,
 	   ax:0,
 	   ay:0,
@@ -169,13 +184,20 @@
 		par1.mover(dt);
 		//console.log(colisao(pc, par1));
 		
+		if (pisou(pc,par1)){
+			pc.y=par1.y-par1.h/2-pc.h/2;
+			pc.pulou = false;
+			pc.vy = 0;
+		}
+		
 		if (pc.y>250-pc.h/2){
 			pc.y=250-pc.h/2;
+			pc.pulou = false;
 			pc.vy = 0;
 		}
 		
 		if (par1.x<-par1.l){
-			par1.x=450;
+			par1.x=1200;
 		}
 		//Desenho
 		limpaTela();
@@ -187,8 +209,8 @@
 	}
 	passo();
 	function teclaPressionada(e){
-		if(e.keyCode == 32){
-			console.log("Espaço pressionado!");
+		if(e.keyCode == 32 && !pc.pulou){
+			pc.pulou = true;
 			pc.vy += -300;
 		}
 	}
