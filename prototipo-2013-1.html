@@ -6,12 +6,21 @@
    </head>
    <body>
    <h1>Protótipo2013-1</h1>
-   <canvas id ="tela" width="800" height="600">Seu navegador não suporta canvas</canvas>
+   <canvas id ="tela" width="800" height="300">Seu navegador não suporta canvas</canvas>
    <script>
+   var imagemPC = new Image();
+   imagemPC.src = "personagem.png";
+   
    var tela = document.getElementById ("tela");
    //console.log("Ola mundo");
    //console.log(tela);
    var ctx = tela.getContext("2d");
+	var paredes = [];
+	for(var i=0; i<4; i++ ){
+		paredes[i] = new Parede();
+		paredes[i].x += 300*i;
+	}
+   
    //ctx.fillRect(10, 10, 50, 50);
    /*
    ctx.moveTo(10,10);
@@ -56,6 +65,8 @@
 
 */
    var pc = {
+	   quadro:0,
+	   direcao:1,
 	   pulou:false, 
 	   x:70, 
 	   y:80,
@@ -70,13 +81,35 @@
 		this.x+=this.vx*dt;
 		this.vy+=this.ay*dt;
 		this.y+=this.vy*dt;
+		if(this.quadro > 2 || this.quadro < 0){
+			this.direcao = -this.direcao;
+			}
+		this.quadro += 8*this.direcao*dt;
+		
 	   }
+	};
+	function Parede(){
+	   this.x = 600; 
+	   this.y = 225;
+	   this.h = 30;
+	   this.l = 150;
+	   this.vx = -200;
+	   this.vy = 0;
+	   this.ax = 0;
+	   this.ay = 0;
+	   this.mover = function(dt){
+		this.vx+=this.ax*dt;
+		this.vy+=this.ay*dt;
+		this.x+=this.vx*dt;
+		this.y+=this.vy*dt;
+	   }
+		
 	};
    var par1 = {
 	   x:600, 
 	   y:225,
-	   h:10,
-	   l:1200,
+	   h:30,
+	   l:100,
 	   vx:-200,
 	   vy:0,
 	   ax:0,
@@ -88,12 +121,20 @@
 		this.y+=this.vy*dt;
 	   }
 	};
+	
    function desenhaPersonagem() {
 	   
-
+		
 	   ctx.save();
 	   ctx.lineWidth="3";
 	   ctx.translate(pc.x, pc.y);
+	   
+	   ctx.drawImage(imagemPC,
+				Math.round(pc.quadro)*35,62, 35, 42,
+				-pc.l/2, -pc.h/2+5, pc.l, pc.h
+		);
+
+	   /*
 	   ctx.beginPath();
 	   ctx.moveTo(0, -pc.h/3);
 	   ctx.lineTo(0, pc.h/6);   
@@ -114,7 +155,7 @@
 	   ctx.fillStyle="yellow";
 	   ctx.fill();
 	   ctx.stroke();
-      
+       */
 
        ctx.beginPath();
 	   ctx.lineWidth="1";
@@ -127,7 +168,7 @@
 	   ctx.closePath();
       
 	   ctx.restore();
-
+	/*
 	   ctx.lineWidth="1";
 	   ctx.beginPath();
 	   ctx.arc(pc.x,pc.y,3,0,2*Math.PI);
@@ -135,7 +176,7 @@
 	   ctx.fillStyle="blue";
 	   ctx.fill();
 	   ctx.stroke();
-
+	*/
 	}
    
    function desenhaParede2(){
@@ -154,24 +195,26 @@
 	   ctx.closePath();
 	}
 	
-	function desenhaParede1() {
+	function desenhaParedes() {
+		for(var i =0; i<paredes.length; i++){
 	    ctx.save();
-	    ctx.translate(par1.x , par1.y);
+	    ctx.translate(paredes[i].x , paredes[i].y);
 	    ctx.lineWidth="3";
 	    ctx.fillStyle="brown";
 	    ctx.beginPath();
-	    ctx.fillRect(-par1.l/2,-par1.h/2,par1.l,par1.h);
-	    ctx.strokeRect(-par1.l/2,-par1.h/2,par1.l,par1.h);
+	    ctx.fillRect(-paredes[i].l/2,-paredes[i].h/2,paredes[i].l,paredes[i].h);
+	    ctx.strokeRect(-paredes[i].l/2,-paredes[i].h/2,paredes[i].l,paredes[i].h);
   	    ctx.closePath();
 	    ctx.restore();
 		
 	    ctx.beginPath();
-	    ctx.arc(par1.x,par1.y,3,0,2*Math.PI);
+	    ctx.arc(paredes[i].x,paredes[i].y,3,0,2*Math.PI);
 	    ctx.closePath();
 	    ctx.fillStyle="blue";
 	    ctx.lineWidth="1";
 	    ctx.fill();
 	    ctx.stroke();
+		}
 	}
 	var anterior = new Date();
 	var agora = new Date();
@@ -181,13 +224,19 @@
 		dt = (agora - anterior) / 1000;
 		// Movimentação
 		pc.mover(dt);
-		par1.mover(dt);
-		//console.log(colisao(pc, par1));
-		
-		if (pisou(pc,par1)){
-			pc.y=par1.y-par1.h/2-pc.h/2;
-			pc.pulou = false;
-			pc.vy = 0;
+		for(var i=0; i<paredes.length;i++){
+			paredes[i].mover(dt);
+			//console.log(colisao(pc, paredes[i]));
+			
+			if (pisou(pc,paredes[i])){
+				pc.y=paredes[i].y-paredes[i].h/2-pc.h/2;
+				pc.pulou = false;
+				pc.vy = 0;
+			}
+			if (paredes[i].x<-paredes[i].l){
+				paredes[i].x=1000;
+				paredes[i].y+=Math.random()*100 -50;
+			}
 		}
 		
 		if (pc.y>250-pc.h/2){
@@ -196,13 +245,10 @@
 			pc.vy = 0;
 		}
 		
-		if (par1.x<-par1.l){
-			par1.x=1200;
-		}
 		//Desenho
 		limpaTela();
 		desenhaPersonagem();
-		desenhaParede1();
+		desenhaParedes();
 		//desenhaParede2();
 		
 		anterior = agora;
