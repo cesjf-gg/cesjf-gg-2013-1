@@ -16,6 +16,7 @@
    //console.log(tela);
    var ctx = tela.getContext("2d");
 	var paredes = [];
+	
 	for(var i=0; i<4; i++ ){
 		paredes[i] = new Parede();
 		paredes[i].x += 300*i;
@@ -46,14 +47,14 @@
    
    
     function pisou(A, B){
-	if(A.x+A.l/2 < B.x-B.l/2){
+	if(Math.round(A.x+A.l/2) < Math.round(B.x-B.l/2)){
 		return false;
-	} else if (A.x-A.l/2 > B.x+B.l/2){
+	} else if (Math.round(A.x-A.l/2) > Math.round(B.x+B.l/2)){
 		return false;
-	} else if(Math.round(A.y+A.h/2) == Math.round(B.y-B.h/2)){
+	} else if(
+		   (Math.round(B.y-B.h/2) <= Math.round(A.y+A.h/2))
+		&& (Math.round(A.y+A.h/2) < Math.round(B.y-B.h/2)+2)){
 		return true;
-	}else if(A.y+A.h/2 > B.y-B.h/2){
-		return false; 
 	}
 	return false;
    }
@@ -64,6 +65,15 @@
    Ay-Ah/2 > By+Bh/2
 
 */
+	function inicia(){
+	   pc.y = 80;
+	   pc.vy =0;
+	   pc.ay = 250;
+		for(var i=0; i<paredes.length; i++ ){
+			paredes[i].x = 200+300*i;
+			paredes[i].y = 225;
+		}
+	}
    var pc = {
 	   quadro:0,
 	   direcao:1,
@@ -89,10 +99,10 @@
 	   }
 	};
 	function Parede(){
-	   this.x = 600; 
+	   this.x = 850; 
 	   this.y = 225;
 	   this.h = 30;
-	   this.l = 150;
+	   this.l = 300;
 	   this.vx = -200;
 	   this.vy = 0;
 	   this.ax = 0;
@@ -100,8 +110,8 @@
 	   this.mover = function(dt){
 		this.vx+=this.ax*dt;
 		this.vy+=this.ay*dt;
-		this.x+=this.vx*dt;
-		this.y+=this.vy*dt;
+		this.x=Math.round(this.x+this.vx*dt);
+		this.y=Math.round(this.y+this.vy*dt);
 	   }
 		
 	};
@@ -117,8 +127,8 @@
 	   mover:function(dt){
 		this.vx+=this.ax*dt;
 		this.vy+=this.ay*dt;
-		this.x+=this.vx*dt;
-		this.y+=this.vy*dt;
+		this.x=Math.round(this.x+this.vx*dt);
+		this.y=Math.round(this.y+this.vy*dt);
 	   }
 	};
 	
@@ -190,8 +200,8 @@
 	function limpaTela(){
 	   ctx.beginPath();
 	   ctx.fillStyle="white";	
-	   ctx.fillRect(0,0,800,600);
-	   ctx.strokeRect(0,0,800,600);
+	   ctx.fillRect(0,0,800,300);
+	   ctx.strokeRect(0,0,800,300);
 	   ctx.closePath();
 	}
 	
@@ -229,20 +239,22 @@
 			//console.log(colisao(pc, paredes[i]));
 			
 			if (pisou(pc,paredes[i])){
-				pc.y=paredes[i].y-paredes[i].h/2-pc.h/2;
+				pc.y=Math.round(paredes[i].y-paredes[i].h/2-pc.h/2);
 				pc.pulou = false;
 				pc.vy = 0;
 			}
 			if (paredes[i].x<-paredes[i].l){
-				paredes[i].x=1000;
+				paredes[i].l = 150;
+				paredes[i].x = 1000;
 				paredes[i].y+=Math.random()*100 -50;
 			}
 		}
 		
-		if (pc.y>250-pc.h/2){
-			pc.y=250-pc.h/2;
+		if (pc.y>400-pc.h/2){
+			//pc.y=400-pc.h/2;
 			pc.pulou = false;
-			pc.vy = 0;
+			//pc.vy = 0;
+			inicia();
 		}
 		
 		//Desenho
@@ -257,7 +269,7 @@
 	function teclaPressionada(e){
 		if(e.keyCode == 32 && !pc.pulou){
 			pc.pulou = true;
-			pc.vy += -300;
+			pc.vy += -200;
 		}
 	}
 
